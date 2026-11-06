@@ -22,14 +22,14 @@ entrada/*.csv (S3) ──evento──▶ Lambda `handler` ──▶ resumo/<arqu
 ## Como rodar
 ```bash
 pip install -e ".[dev]"
-pytest -q                                       # 9 testes, sem conta AWS
+pytest -q                                       # 12 testes, sem conta AWS
 serverless-reclamacoes dados/exemplo.csv        # mesma regra, direto no terminal
 ```
 Para publicar na sua conta (nível gratuito): `sam build && sam deploy --guided`, depois
 `aws s3 cp dados/exemplo.csv s3://<bucket>/entrada/exemplo.csv`.
 
 ## Números medidos
-- 9 testes passando (5 da regra, 4 do Lambda com S3 e DynamoDB simulados): `pytest -q`, 06/11/2026.
+- 12 testes passando (5 da regra, 4 do Lambda com S3 e DynamoDB simulados, 3 da CLI): `pytest -q`, 06/11/2026.
 - Agregar 100 mil linhas sintéticas (500 empresas): **~0,43 s** (mediana de 3 execuções, máquina de desenvolvimento, Python 3.13).
 
 ## Limites honestos
