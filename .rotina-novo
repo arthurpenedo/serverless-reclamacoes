@@ -1,1 +1,0 @@
-Pipeline serverless na AWS (S3 + Lambda + DynamoDB) que resume reclamações de consumidor, com template SAM e testes locais com moto
