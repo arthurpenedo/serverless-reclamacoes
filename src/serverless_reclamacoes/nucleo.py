@@ -29,9 +29,12 @@ def agregar(texto_csv: str) -> dict[str, dict]:
         total[empresa] += 1
         assuntos[empresa][(linha["assunto"] or "").strip() or "sem assunto"] += 1
         try:
-            nota = int(linha["nota"])
-        except (TypeError, ValueError):
+            bruta = float(linha["nota"].strip().replace(",", "."))  # planilhas exportam "4.0" ou "4,0"
+        except (AttributeError, ValueError):
             continue
+        if not bruta.is_integer():  # 3.5 não é nota válida (só inteiros de 1 a 5)
+            continue
+        nota = int(bruta)
         if 1 <= nota <= 5:
             notas[empresa].append(nota)
     resumo = {}

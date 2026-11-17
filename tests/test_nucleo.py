@@ -21,6 +21,12 @@ def test_nota_invalida_conta_mas_nao_entra_na_media():
     assert r["X"]["nota_media"] == 4.0
 
 
+def test_nota_de_planilha_com_ponto_zero_ou_virgula_entra_na_media():
+    r = agregar('empresa,assunto,estado,nota\nX,a,SP,4.0\nX,a,SP,"2,0"\nX,a,SP,3.5\nX,a,SP,nan\nX,a,SP,\n')
+    assert r["X"]["reclamacoes"] == 5
+    assert r["X"]["nota_media"] == 3.0  # só 4.0 e 2,0 valem; 3.5, nan e vazio ficam de fora
+
+
 def test_sem_nota_valida_media_none():
     assert agregar("empresa,assunto,estado,nota\nX,a,SP,\n")["X"]["nota_media"] is None
 
