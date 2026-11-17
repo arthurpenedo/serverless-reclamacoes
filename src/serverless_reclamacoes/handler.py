@@ -52,5 +52,7 @@ def handler(event, context=None):
         chave = unquote_plus(registro["s3"]["object"]["key"])
         if not chave.startswith(PREFIXO_ENTRADA):  # evita laço: o resumo não dispara de novo
             continue
+        if chave.endswith("/"):  # "pasta" criada no console do S3: objeto vazio, não é CSV
+            continue
         gravadas += processar(s3, tabela, bucket, chave)
     return {"empresas": gravadas}

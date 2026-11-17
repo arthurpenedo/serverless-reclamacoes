@@ -64,6 +64,12 @@ def test_resumo_nao_dispara_de_novo(nuvem):
     assert handler(evento("resumo/x.json")) == {"empresas": 0}
 
 
+def test_pasta_criada_no_console_e_ignorada(nuvem):
+    s3, _ = nuvem
+    s3.put_object(Bucket=BUCKET, Key="entrada/", Body=b"")
+    assert handler(evento("entrada/")) == {"empresas": 0}
+
+
 def test_csv_com_bom_do_excel(nuvem):
     s3, _ = nuvem
     s3.put_object(Bucket=BUCKET, Key="entrada/bom.csv", Body=b"\xef\xbb\xbf" + EXEMPLO.read_bytes())
