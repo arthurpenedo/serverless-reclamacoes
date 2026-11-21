@@ -16,6 +16,9 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
     try:
         resumo = agregar(args.csv.read_text(encoding="utf-8-sig"))
+    except UnicodeDecodeError:
+        print(f"erro: {args.csv.name} não está em UTF-8 (salve o CSV como UTF-8)", file=sys.stderr)
+        return 1
     except (OSError, ValueError) as erro:
         print(f"erro: {erro}", file=sys.stderr)
         return 1

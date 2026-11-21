@@ -17,6 +17,13 @@ def test_cli_arquivo_inexistente(capsys, tmp_path):
     assert "erro" in capsys.readouterr().err
 
 
+def test_cli_arquivo_fora_de_utf8_da_mensagem_clara(capsys, tmp_path):
+    latin = tmp_path / "latin.csv"
+    latin.write_bytes("empresa,assunto,estado,nota\nAção,cobrança,SP,5\n".encode("latin-1"))
+    assert main([str(latin)]) == 1
+    assert "não está em UTF-8" in capsys.readouterr().err
+
+
 def test_cli_coluna_ausente(capsys, tmp_path):
     ruim = tmp_path / "ruim.csv"
     ruim.write_text("empresa,assunto\nX,a\n", encoding="utf-8")
