@@ -29,3 +29,18 @@ def test_cli_coluna_ausente(capsys, tmp_path):
     ruim.write_text("empresa,assunto\nX,a\n", encoding="utf-8")
     assert main([str(ruim)]) == 1
     assert "colunas ausentes" in capsys.readouterr().err
+
+
+def test_cli_csv_vazio_da_colunas_ausentes(capsys, tmp_path):
+    vazio = tmp_path / "vazio.csv"
+    vazio.write_text("", encoding="utf-8")
+    assert main([str(vazio)]) == 1
+    assert "colunas ausentes" in capsys.readouterr().err
+
+
+def test_cli_notas_nan_e_inf_nao_entram_na_media(capsys, tmp_path):
+    arq = tmp_path / "estranho.csv"
+    arq.write_text("empresa,assunto,estado,nota\nX,a,SP,nan\nX,a,SP,inf\nX,a,SP,4\n", encoding="utf-8")
+    assert main([str(arq)]) == 0
+    saida = json.loads(capsys.readouterr().out)
+    assert saida["X"]["reclamacoes"] == 3 and saida["X"]["nota_media"] == 4
