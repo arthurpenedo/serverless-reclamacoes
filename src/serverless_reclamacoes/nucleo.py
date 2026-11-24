@@ -16,6 +16,8 @@ def agregar(texto_csv: str) -> dict[str, dict]:
     Falta de coluna obrigatória levanta ValueError.
     """
     leitor = csv.DictReader(io.StringIO(texto_csv))
+    if leitor.fieldnames:  # planilhas exportam "Empresa" ou " nota": não rejeitar por maiúscula ou espaço
+        leitor.fieldnames = [(c or "").strip().lower() for c in leitor.fieldnames]
     faltam = [c for c in COLUNAS if c not in (leitor.fieldnames or [])]
     if faltam:
         raise ValueError(f"colunas ausentes: {', '.join(faltam)}")

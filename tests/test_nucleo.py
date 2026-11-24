@@ -35,6 +35,11 @@ def test_linha_sem_empresa_ignorada():
     assert agregar("empresa,assunto,estado,nota\n,a,SP,3\n") == {}
 
 
+def test_cabecalho_com_maiuscula_e_espaco_e_aceito():
+    r = agregar("Empresa, Assunto ,ESTADO,Nota \nX,a,SP,4\n")
+    assert r["X"]["reclamacoes"] == 1 and r["X"]["nota_media"] == 4
+
+
 def test_coluna_ausente():
     with pytest.raises(ValueError, match="nota"):
         agregar("empresa,assunto,estado\nX,a,SP\n")
