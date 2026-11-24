@@ -11,6 +11,7 @@ from .nucleo import agregar
 
 
 def main(argv=None) -> int:
+    """Devolve 0 se deu certo e 2 se o arquivo não pôde ser lido (mesmo código dos outros projetos)."""
     p = argparse.ArgumentParser(prog="serverless-reclamacoes", description=__doc__)
     p.add_argument("csv", type=Path, help="arquivo CSV (empresa,assunto,estado,nota)")
     args = p.parse_args(argv)
@@ -18,10 +19,10 @@ def main(argv=None) -> int:
         resumo = agregar(args.csv.read_text(encoding="utf-8-sig"))
     except UnicodeDecodeError:
         print(f"erro: {args.csv.name} não está em UTF-8 (salve o CSV como UTF-8)", file=sys.stderr)
-        return 1
+        return 2
     except (OSError, ValueError) as erro:
         print(f"erro: {erro}", file=sys.stderr)
-        return 1
+        return 2
     print(json.dumps(resumo, ensure_ascii=False, indent=2))
     return 0
 
